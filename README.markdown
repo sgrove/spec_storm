@@ -11,13 +11,10 @@ SauceSpace relies on parallel_specs to execute the specs.
 
     sudo gem install parallel
     script/plugin install git://github.com/grosser/parallel_specs.git
-
-SauceSpace only relied on parallel_specs as a launcher, so following the installation instructions on its github page is optional - but you may want to in order to speed up your non-selenium specs.
-
-Next:
-
     script/plugin install git://github.com/sgrove/special_sauce.git
     rake ss:setup
+
+SauceSpace relies on parallel_specs as a launcher, so be sure to follow the [installation instructions](http://github.com/grosser/parallel_specs) - as a bonus, it will probably  speed up your non-selenium specs as well.
 
 Usage
 =====
@@ -44,6 +41,7 @@ TODO
 ====
 * Data interactions: Since a rails server is running, any data you create outside of your selenium script won't be accessible. This includes fixtures. This should be fixed next release
 * Wrap it all into a nicer execution model. e.g. `rake ss[integration]` should reset the database, start the server, run the specs, and stop the server. Right now it's a bit too manual
+* Unit tests
 
 Thanks
 ======
