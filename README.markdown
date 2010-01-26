@@ -17,13 +17,7 @@ SauceSpace only relied on parallel_specs as a launcher, so following the install
 Next:
 
     script/plugin install git://github.com/sgrove/special_sauce.git
-    cp config/environments/test.rb config/environments/selenium.rb
-
-To `config/environments/selenium.rb`, add:
-
-    module SauceSpace
-      USE_NAMESPACE_HACK = true
-    end
+    rake ss:setup
 
 Usage
 =====

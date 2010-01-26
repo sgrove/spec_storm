@@ -1,9 +1,19 @@
-# desc "Explaining what the task does"
-# task :sauce_space do
-#   # Task goes here
-# end
-
 namespace :ss do
+  desc "Setup initial selenium environment"
+  task :setup, :environment do |t, args|
+    args.with_defaults(:environment => "selenium")
+    require 'ftools'
+
+    File.copy(File.join(RAILS_ROOT, 'config', 'environments', 'test.rb'),
+              File.join(RAILS_ROOT, 'config', 'environments', "#{args.environment}.rb"))
+
+    open(File.join(RAILS_ROOT, 'config', 'environments', "#{args.environment}.rb"), 'a') do |f|
+      f.puts "\nmodule SauceSpace"
+      f.puts "  USE_NAMESPACE_HACK = true"
+      f.puts "end"
+    end
+  end
+
   desc "Prepare database with namespaces for concurrent rspec tests in path"
   task :prepare, :environment, :prefix do |t,args|
     args.with_defaults(:prefix => "", :environment => "selenium")
