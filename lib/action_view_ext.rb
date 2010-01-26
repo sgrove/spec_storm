@@ -14,7 +14,7 @@ ActionView::Helpers::UrlHelper.class_eval do
   alias_method :original_link_to, :link_to
 
   def link_to(*args, &block)
-    puts "link_to:\t#{args.inspect}"
+    logger.debug "link_to:\t#{args.inspect}"
 
     arguments = args.join(",")
     if block_given?
