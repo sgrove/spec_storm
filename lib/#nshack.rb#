@@ -1,0 +1,100 @@
+puts "Loading NSHack!!!!!! HACKHACKHACK!"
+puts "\t#{ActiveRecord.inspect}"
+puts "\tPrefix: #{ActiveRecord::Base.table_name_prefix}"
+puts "\tENV['DB_PREFIX']: #{ENV['DB_PREFIX']}"
+ActiveRecord::Base.table_name_prefix = ENV['DB_PREFIX'] unless ENV['DB_PREFIX'].nil?
+
+puts "\tPrefix: #{ActiveRecord::Base.table_name_prefix}"
+
+ActiveRecord::Base.instance_eval do
+  def reset_all_table_names
+    subclasses.each do |sc|
+      sc.reset_table_name
+      puts "Reset #{sc}..."
+    end
+  end
+
+  def show_all_subclasses
+    subclasses.each do |sc|
+      puts "#{sc} -> #{sc.table_name}"
+    end
+  end
+end
+
+module ActionController
+  class NoDBPrefixSpecified < ActionControllerError #:nodoc:
+  end
+end
+
+# nsh_15c1907588f698b_
+ActionController::Base.class_eval do
+  alias_method :original_url_for, :url_for
+
+  def url_for(options = {})
+    puts "URL_FOR:\n\t#{options.inspect}"
+    options.merge!( {:db_prefix => ActiveRecord::Base.table_name_prefix} ) unless ActiveRecord::Base.table_name_prefix.nil? or options.class != Hash
+    puts "->\t#{options.inspect}"
+    original_url_for options
+  end
+end
+
+ActionView::Helpers::UrlHelper.class_eval do
+  alias_method :original_url_to, :url_for
+  alias_method :original_link_to, :link_to
+
+  def url_for(options = {})
+    # TODO: Regex stuff to only append this when necessary
+    case options
+      when String
+      return "#{original_url_to( options )}?db_prefix=#{ActiveRecord::Base.table_name_prefix}" unless options.include? "db_prefix="
+    end
+
+    original_url_to options
+  end
+
+  def link_to(*args, &block)
+    puts "link_to:\t#{args.inspect}"
+
+    arguments = args.join(",")
+    if block_given?
+      return eval("original_link_to( #{arguments}")
+    end
+
+    original_link_to *args
+  end
+end
+
+ActionController::Base.class_eval do
+  alias_method :original_process, :process
+  alias_method :original_redirect_to, :redirect_to
+
+  def process(request, response, method = :perform_action, *arguments) #:nodoc:
+    puts request.params.inspect and raise StandardError if request.params[:db_prefix].nil?
+    puts "We have hijacked ActionController::Base#process!"
+    puts "\tParams: #{request.params.inspect}"
+    puts "\tPrefix: #{ActiveRecord::Base.table_name_prefix};"
+    if not request.params[:db_prefix].nil?
+      ActiveRecord::Base.table_name_prefix = request.params[:db_prefix]
+      ActiveRecord::Base.reset_all_table_names
+      ActiveRecord::Base.show_all_subclasses
+    end
+
+    puts request.params.inspect and raise StandardError if ActiveRecord::Base.table_name_prefix.nil? or ActiveRecord::Base.table_name_prefix == ""
+
+    puts "\tPrefix: #{ActiveRecord::Base.table_name_prefix}"
+    original_process(request, response, method = :perform_action, *arguments) #:nodoc:
+  end
+
+  def redirect_to(options = {}, response_status = {}) #:doc:
+    raise ActionControllerError.new("Cannot redirect to nil!") if options.nil?
+    
+
+    case options
+    when String
+      options += "?db_prefix=#{ActiveRecord::Base.table_name_prefix}" unless options.include? "db_prefix="
+    end
+
+    original_redirect_to( options, response_status )
+  end
+
+end
