@@ -17,7 +17,7 @@ namespace :ss do
   desc "Prepare database with namespaces for concurrent rspec tests in path"
   task :prepare, :environment, :prefix do |t,args|
     args.with_defaults(:prefix => "", :environment => "selenium")
-    puts "Args: #{args.inspect}"
+    require 'digest/sha1'
 
     task = "spec"
     lib = "specs"
