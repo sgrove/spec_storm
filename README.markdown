@@ -7,55 +7,49 @@ It also includes an rspec helper that patches the Selenium Driver class to calcu
 
 Installation
 ============
-SauceSpace relies on parallel_specs for actually executing the specs.
+SauceSpace relies on parallel_specs to execute the specs.
 
-`
-sudo gem install parallel
-script/plugin install git://github.com/grosser/parallel_specs.git
-`
+    sudo gem install parallel
+    script/plugin install git://github.com/grosser/parallel_specs.git
 
 SauceSpace only relied on parallel_specs as a launcher, so following the installation instructions on its github page is optional - but you may want to in order to speed up your non-selenium specs.
 
 Next:
 
-`
-script/plugin install git://github.com/sgrove/special_sauce.git
+    script/plugin install git://github.com/sgrove/special_sauce.git
+    cp config/environments/test.rb config/environments/selenium.rb
 
-cp config/environments/test.rb config/environments/selenium.rb
-`
+To `config/environments/selenium.rb`, add:
 
-To config/environments/selenium.rb, add:
-`
-module SauceSpace
-
-  USE_NAMESPACE_HACK = true
-
-end
-`
+    module SauceSpace
+      USE_NAMESPACE_HACK = true
+    end
 
 Usage
 =====
-Use the rake task ss:prepare in order to prepare the database before each run. You can pass it the environment to prepare for (required) and the path full of specs to namespace (optional). If you leave out the path, it prepares for everything in specs/
+Use the rake task ss:prepare in order to prepare the database before each run. You can pass it the environment to prepare for (required) and the path full of specs to namespace (optional). If you leave out the path, it prepares for every spec file.
 
 The most common usage is:
-`rake ss:prepare[selenium,integration]`
 
-Now start up a rails server with the appropriate environment:
-`script/server -e selenium`
+    rake ss:prepare[selenium,integration]
+
+Now start up a rails server with the appropriate environment with `script/server -e selenium`
 
 For your specs, you'll want to add in the sauce_spec helper:
-`require 'spec_helper'
-require 'sauce_spec_helper'`
+
+    require 'spec_helper'
+    require 'sauce_spec_helper'
 
 And finally, you can run your Selenium specs in parallel:
-`rake parallel:specs[4,integration]`
+
+    rake parallel:specs[4,integration]
 
 Sit back and watch as multiple browsers hit the same rails server and each sees a pristine environment!
 
 TODO
 ====
 * Data interactions: Since a rails server is running, any data you create outside of your selenium script won't be accessible. This includes fixtures. This should be fixed next release
-* Wrap it all into a nicer execution model. e.g. "rake ss[integration]" resets the database, starts the server, runs the specs, and stops the server. Right now it's a bit too manual
+* Wrap it all into a nicer execution model. e.g. `rake ss[integration]` should reset the database, start the server, run the specs, and stop the server. Right now it's a bit too manual
 
 Thanks
 ======
