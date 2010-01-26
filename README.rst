@@ -49,4 +49,9 @@ TODO
 * Data interactions: Since a rails server is running, any data you create outside of your selenium script won't be accessible. This includes fixtures. This should be fixed next release
 * Wrap it all into a nicer execution model. e.g. "rake ss[integration]" resets the database, starts the server, runs the specs, and stops the server. Right now it's a bit too manual
 
+Thanks
+======
+Thanks to Michael Grosser (http://pragmatig.wordpress.com/) for the parallel_specs plugin, which had some great pointers.
+And thanks to Sauce Labs (https://saucelabs.com/), for their push into concurrent testing.
+
 Copyright (c) 2010 Sauce Labs Inc, released under the MIT license
