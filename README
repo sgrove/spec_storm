@@ -1,7 +1,7 @@
 SauceSpace
 ==========
 
-Special Sauce (or SauceSpace) allows you to run your selenium tests concurrently (at the file-level) without colliding with one another. It hashes each spec file and then uses the hash as a database prefix, giving us a nice namespacing mechanism. It auto-patches rails' link-generation to append a db_prefix parameter, and dynamically resets the prefix on each request.
+Special Sauce (or SauceSpace) allows you to run your selenium tests concurrently (at the file-level) without colliding with one another, and with almost no changes to your current rspec selenium specs. It hashes each spec file and then uses the hash as a database prefix, giving us a nice namespacing mechanism. It auto-patches rails' link-generation to append a db_prefix parameter, and dynamically resets the prefix on each request.
 
 It also includes an rspec helper that patches the Selenium Driver class to calculate the db prefix, and will automatically append it to any "open" command.
 
