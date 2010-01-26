@@ -1,29 +1,35 @@
 SauceSpace
 ==========
 
-Special Sauce (or SauceSpace) allows you to run your selenium tests concurrently (at the file-level) without colliding with one another, and with almost no changes to your current rspec selenium specs. It hashes each spec file and then uses the hash as a database prefix, giving us a nice namespacing mechanism. It auto-patches rails' link-generation to append a db_prefix parameter, and dynamically resets the prefix on each request.
+SauceSpace allows you to run your selenium tests concurrently (at the file-level) without colliding with one another, and with almost no changes to your current rspec selenium specs. It hashes each spec file and then uses the hash as a database prefix, giving us a nice namespacing mechanism. It auto-patches rails' link-generation to append a db_prefix parameter, and dynamically resets the prefix on each request.
 
 It also includes an rspec helper that patches the Selenium Driver class to calculate the db prefix, and will automatically append it to any "open" command.
 
 Installation
 ============
-Special Sauce relies on parallel_specs for actually executing the specs.
+SauceSpace relies on parallel_specs for actually executing the specs.
 
 `
 sudo gem install parallel
 script/plugin install git://github.com/grosser/parallel_specs.git
 `
 
-SpecialSauce only relied on parallel_specs as a launcher, so following the installation instructions on its github page is optional - but you may want to in order to speed up your non-selenium specs.
+SauceSpace only relied on parallel_specs as a launcher, so following the installation instructions on its github page is optional - but you may want to in order to speed up your non-selenium specs.
 
 Next:
 
-`script/plugin install git://github.com/sgrove/special_sauce.git
-cp config/environments/test.rb config/environments/selenium.rb`
+`
+script/plugin install git://github.com/sgrove/special_sauce.git
+
+cp config/environments/test.rb config/environments/selenium.rb
+`
 
 To config/environments/selenium.rb, add:
-`module SauceSpace
+`
+module SauceSpace
+
   USE_NAMESPACE_HACK = true
+
 end
 `
 
