@@ -10,17 +10,17 @@ module SauceSpecs
     db_prefix = self.db_prefix_for(file)
 
     # Monkey-patch like there's no tomorrow
-    Selenium::SeleniumDriver.class_eval do
+    Selenium::Client::Driver.class_eval do
       attr_accessor :db_prefix
     end
     
-    Selenium::SeleniumDriver.class_eval do
+    Selenium::Client::Driver.class_eval do
       alias :original_open :open
       
       def open(url)
         # TODO: Regex stuff to append query properly
         new_url = url.include?("db_prefix=") ? url :"#{url}?db_prefix=#{db_prefix}"
-        #puts "Patching url, opening #{new_url}"
+        puts "Patching url, opening #{new_url}"
         original_open( new_url )
       end
     end
