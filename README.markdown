@@ -9,38 +9,40 @@ Installation
 ============
 Special Sauce relies on parallel_specs for actually executing the specs.
 
-
+`
 sudo gem install parallel
 script/plugin install git://github.com/grosser/parallel_specs.git
+`
 
 SpecialSauce only relied on parallel_specs as a launcher, so following the installation instructions on its github page is optional - but you may want to in order to speed up your non-selenium specs.
 
 Next:
 
-script/plugin install git://github.com/sgrove/special_sauce.git
-cp config/environments/test.rb config/environments/selenium.rb
+`script/plugin install git://github.com/sgrove/special_sauce.git
+cp config/environments/test.rb config/environments/selenium.rb`
 
 To config/environments/selenium.rb, add:
-module SauceSpace
+`module SauceSpace
   USE_NAMESPACE_HACK = true
 end
+`
 
 Usage
 =====
 Use the rake task ss:prepare in order to prepare the database before each run. You can pass it the environment to prepare for (required) and the path full of specs to namespace (optional). If you leave out the path, it prepares for everything in specs/
 
 The most common usage is:
-rake ss:prepare[selenium,integration]
+`rake ss:prepare[selenium,integration]`
 
 Now start up a rails server with the appropriate environment:
-script/server -e selenium
+`script/server -e selenium`
 
 For your specs, you'll want to add in the sauce_spec helper:
-require 'spec_helper'
-require 'sauce_spec_helper'
+`require 'spec_helper'
+require 'sauce_spec_helper'`
 
 And finally, you can run your Selenium specs in parallel:
-rake parallel:specs[4,integration]
+`rake parallel:specs[4,integration]`
 
 Sit back and watch as multiple browsers hit the same rails server and each sees a pristine environment!
 
@@ -51,7 +53,7 @@ TODO
 
 Thanks
 ======
-Thanks to Michael Grosser (http://pragmatig.wordpress.com/) for the parallel_specs plugin, which had some great pointers.
-And thanks to Sauce Labs (https://saucelabs.com/), for their push into concurrent testing.
+* Thanks to [Michael Grosser](http://pragmatig.wordpress.com/) for the parallel_specs plugin, which had some great pointers.
+* And thanks to [Sauce Labs](https://saucelabs.com/), for their push into concurrent testing.
 
 Copyright (c) 2010 Sauce Labs Inc, released under the MIT license
