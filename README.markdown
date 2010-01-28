@@ -31,6 +31,24 @@ For your specs, you'll want to add in the sauce_spec helper:
     require 'spec_helper'
     require 'sauce_spec_helper'
 
+And you'll want to patch your selenium driver as well. For example, in your before(:all) block:
+
+    before(:all) do
+      @verification_errors = []
+    
+      @selenium_driver = Selenium::Client::Driver.new(
+        :host => "localhost",
+        :port => 4444,
+        :browser => "*firefox",
+        :url => "http://localhost:3000",
+        :timeout_in_second => 90
+        )
+    
+      SauceSpecs::patch_selenium_driver(__FILE__)
+    
+      @selenium_driver.db_prefix = SauceSpecs::db_prefix_for(__FILE__)
+    end
+
 And finally, you can run your Selenium specs in parallel:
 
     rake parallel:specs[4,integration]
