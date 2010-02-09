@@ -1,4 +1,5 @@
 # SpecStorm
+puts "Parsing SpecStorm loader"
 module SpecStorm
   class SpecStormError < StandardError; end #:nodoc
   class NoDBPrefixSpecified < SpecStormError; end #:nodoc
